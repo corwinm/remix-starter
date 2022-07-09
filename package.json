@@ -11,6 +11,7 @@
     "generate:css": "npx tailwindcss -o ./app/tailwind.css",
     "format": "prettier --write .",
     "prepare": "husky install",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
@@ -50,6 +51,12 @@
   "engines": {
     "node": ">=14"
   },
+  "eslintIgnore": [
+    "/node_modules",
+    "/build",
+    "/public/build",
+    "/api"
+  ],
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   }
