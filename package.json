@@ -13,7 +13,11 @@
     "prepare": "husky install",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "db:start": "docker compose up -d",
+    "db:stop": "docker compose down",
+    "vercel-build": "prisma generate && prisma migrate deploy && npm run build",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.6",

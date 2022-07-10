@@ -1,11 +1,10 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { PrismaClient } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
+import { prismaClient } from "~/utils/prisma.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const prisma = new PrismaClient();
-  const count = await prisma.personTest.count();
+  const count = await prismaClient.personTest.count();
   return json({ count });
 };
 
