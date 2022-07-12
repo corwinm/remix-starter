@@ -1,19 +1,10 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { prismaClient } from "~/utils/prisma.server";
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const count = await prismaClient.personTest.count();
-  return json({ count });
-};
+import LogoutButton from "~/components/logout-button";
 
 export default function Index() {
-  const { count } = useLoaderData();
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
       <h1 className="font-serif">Welcome to Remix</h1>
-      <p>Total test count: {count}</p>
+      <LogoutButton />
       <ul>
         <li>
           <a
