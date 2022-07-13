@@ -13,23 +13,25 @@ export default function Screen() {
   const data = useActionData();
   return (
     <Form method="post" className="flex flex-col">
-      <h1>Register new user</h1>
-      <label className="flex flex-col">
-        E-Mail
-        <span>{data?.errors?.email}</span>
-        <input type="email" name="email" required />
-      </label>
-      <label className="flex flex-col">
-        Password
-        <span>{data?.errors?.password}</span>
-        <input
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          required
-        />
-      </label>
-      <button>Register</button>
+      <fieldset>
+        <legend>Register new user</legend>
+        <label className="flex flex-col">
+          E-Mail
+          <span>{data?.errors?.email}</span>
+          <input type="email" name="email" required />
+        </label>
+        <label className="flex flex-col">
+          Password
+          <span>{data?.errors?.password}</span>
+          <input
+            type="password"
+            name="password"
+            autoComplete="current-password"
+            required
+          />
+        </label>
+        <button>Register</button>
+      </fieldset>
     </Form>
   );
 }
@@ -58,6 +60,7 @@ export let action: ActionFunction = async ({ request }) => {
     await registerUser({
       email,
       password,
+      host: new URL(request.url).origin,
     });
   } catch (error) {
     if (error instanceof EmailAlreadyUsedError) {
@@ -73,12 +76,9 @@ export let action: ActionFunction = async ({ request }) => {
   return redirect("/");
 };
 
-// Finally, we can export a loader function where we check if the user is
-// authenticated with `authenticator.isAuthenticated` and redirect to the
-// dashboard if it is or return null if it's not
 export let loader: LoaderFunction = async ({ request }) => {
-  // If the user is already authenticated redirect to /dashboard directly
+  // If the user is already authenticated redirect to / directly
   return await authenticator.isAuthenticated(request, {
-    successRedirect: "/dashboard",
+    successRedirect: "/",
   });
 };

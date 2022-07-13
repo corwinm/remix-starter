@@ -10,10 +10,13 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  passwordHash String
-  profile      Profile?
+  id               Int                @id @default(autoincrement())
+  email            String             @unique
+  passwordHash     String
+  confirmed        Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  profile          Profile?
+  ConformationCode ConformationCode[]
 }
 
 model Profile {
@@ -22,4 +25,11 @@ model Profile {
   lastName  String?
   User      User    @relation(fields: [userId], references: [id])
   userId    Int     @unique
+}
+
+model ConformationCode {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

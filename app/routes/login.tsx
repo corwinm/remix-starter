@@ -10,22 +10,24 @@ export default function Screen() {
   const data = useActionData();
   return (
     <Form method="post" className="flex flex-col">
-      <h1>Login</h1>
-      {data?.error}
-      <label className="flex flex-col">
-        E-Mail
-        <input type="email" name="email" required />
-      </label>
-      <label className="flex flex-col">
-        Password
-        <input
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          required
-        />
-      </label>
-      <button>Sign In</button>
+      <fieldset>
+        <legend>Login</legend>
+        {data?.error}
+        <label className="flex flex-col">
+          E-Mail
+          <input type="email" name="email" required />
+        </label>
+        <label className="flex flex-col">
+          Password
+          <input
+            type="password"
+            name="password"
+            autoComplete="current-password"
+            required
+          />
+        </label>
+        <button>Sign In</button>
+      </fieldset>
     </Form>
   );
 }
