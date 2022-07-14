@@ -31,6 +31,7 @@ authenticator.use(
     // And return the user as the Authenticator expects it
     return {
       email: user.email,
+      confirmed: user.confirmed,
     };
   }),
   // each strategy has a name and can be changed to use another one

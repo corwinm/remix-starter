@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { authenticator } from "~/utils/authenticator.server";
 import { prismaClient } from "~/utils/prisma.server";
 import { hash } from "../utils/bcrypt.server";
 import { transporter } from "../utils/nodemailer.server";
@@ -7,6 +8,7 @@ export type User = {
   lastName?: string;
   firstName?: string;
   email: string;
+  confirmed: boolean;
 };
 
 export async function findUserByEmail(email: string) {
@@ -55,7 +57,7 @@ export async function registerUser({
   }
   try {
     // send mail with defined transport object
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
       from: '"No Reply" <no-reply@example.com>', // sender address
       to: email, // list of receivers
       subject: "Hello ✔", // Subject line
@@ -72,4 +74,38 @@ export async function registerUser({
     }
     throw Error("Unknown error occurred.");
   }
+}
+
+export async function confirmUser({ code }: { code: string }) {
+  try {
+    await prismaClient.conformationCode.update({
+      where: {
+        id: code,
+      },
+      data: {
+        user: {
+          update: {
+            confirmed: true,
+          },
+        },
+      },
+    });
+    await prismaClient.conformationCode.delete({ where: { id: code } });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log({ error });
+      switch (error.code as string) {
+        case "P2016":
+          // Code doesn't exist (or is already used)
+          throw new Error("Unable to confirm email.");
+        default:
+          throw Error("Unknown error occurred.");
+      }
+    }
+  }
+}
+
+export async function getUser({ request }: { request: Request }) {
+  let user = await authenticator.isAuthenticated(request);
+  return user;
 }
